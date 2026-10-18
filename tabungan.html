@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#138a63">
+<title>GOLDVAULT PRO ULTIMATE</title>
+<style>
+:root{
+--bg:#f3f7f5;--card:#fff;--text:#172a22;--muted:#78877f;
+--border:#e1eae5;--green:#138a63;--green2:#08744f;
+--soft:#e9f7f0;--red:#dc4c55;--shadow:0 8px 28px #173d2b0b
+}
+body.dark{--bg:#111a16;--card:#1c2821;--text:#edf6f0;--muted:#a2b3a8;--border:#34453a;--soft:#253d30;--shadow:0 8px 28px #0002}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;transition:.2s}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.app{max-width:1150px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.brand{font-size:22px;font-weight:900;letter-spacing:.3px}
+.brand span{color:var(--green)}
+.sub{font-size:12px;color:var(--muted);margin-top:5px}
+.actions{display:flex;gap:7px;flex-wrap:wrap}
+.btn{border:1px solid var(--border);background:var(--card);color:var(--text);padding:10px 13px;border-radius:10px;font-weight:700}
+.btn.primary{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.primary:hover{background:var(--green2)}
+.btn.danger{color:var(--red)}
+.btn.small{font-size:12px;padding:7px 9px}
+.hero{background:linear-gradient(125deg,#08744f,#21a675);color:#fff;border-radius:22px;padding:24px;margin-bottom:17px;box-shadow:var(--shadow)}
+.hero-label{font-size:12px;opacity:.85}
+.balance{font-size:clamp(30px,7vw,43px);font-weight:900;margin:10px 0}
+.hero-row{display:flex;gap:25px;flex-wrap:wrap;margin-top:20px}
+.hero-row div{font-size:12px;opacity:.9}
+.hero-row strong{display:block;font-size:17px;margin-top:6px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:17px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:17px;min-width:0;box-shadow:var(--shadow)}
+.stat-label{font-size:12px;color:var(--muted)}
+.stat-value{font-size:clamp(16px,3vw,22px);font-weight:800;margin-top:9px;overflow-wrap:anywhere}
+.green{color:var(--green)}.red{color:var(--red)}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:17px}
+h2{font-size:16px;margin:0 0 15px}
+h3{font-size:14px;margin:0 0 10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+label{font-size:12px;color:var(--muted);font-weight:700}
+input,select{width:100%;min-width:0;padding:11px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text)}
+.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+canvas{width:100%;height:220px;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.wallets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.wallet{border:1px solid var(--border);border-radius:13px;padding:13px;min-width:0}
+.wallet-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.wallet-name{font-weight:800;overflow-wrap:anywhere}
+.wallet-balance{font-size:19px;font-weight:800;margin:12px 0 9px;overflow-wrap:anywhere}
+.wallet-type{font-size:11px;color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}
+.filters input{flex:1;min-width:130px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:540px}
+th,td{padding:12px 8px;border-bottom:1px solid var(--border);text-align:left;font-size:12px}
+th{font-size:10px;color:var(--muted);text-transform:uppercase}
+td.amount{font-weight:800;white-space:nowrap}
+.empty{text-align:center;padding:22px;color:var(--muted);font-size:13px}
+.goal-list{display:grid;gap:11px}
+.goal{border:1px solid var(--border);border-radius:12px;padding:13px}
+.goal-head{display:flex;justify-content:space-between;gap:8px}
+.goal-name{font-weight:800;overflow-wrap:anywhere}
+.goal-amount{font-size:12px;color:var(--muted);margin-top:5px}
+.progress{height:8px;border-radius:20px;background:var(--border);overflow:hidden;margin:12px 0}
+.progress div{height:100%;background:var(--green);border-radius:20px}
+.goal-actions{display:flex;gap:6px;flex-wrap:wrap}
+.goal-actions button{font-size:11px;padding:7px 9px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:100;background:var(--text);color:var(--card);padding:13px 17px;border-radius:12px;max-width:90%;text-align:center;box-shadow:var(--shadow)}
+.hidden{display:none!important}
+.modal{position:fixed;inset:0;z-index:50;background:#0008;display:flex;align-items:center;justify-content:center;padding:15px;overflow:auto}
+.modal-box{width:100%;max-width:430px;max-height:94vh;overflow:auto;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:17px;padding:19px}
+.modal-box p{font-size:12px;line-height:1.5;color:var(--muted)}
+.amount-modal-box{width:100%;max-width:400px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:17px;padding:22px;box-shadow:0 20px 60px #0002}
+.amount-modal-box h2{font-size:19px;margin:0 0 8px}
+.amount-modal-box .field{margin-top:18px}
+.amount-modal-box input{font-size:18px;padding:14px}
+.amount-modal-actions{display:flex;gap:9px;margin-top:18px}
+.amount-modal-actions button{flex:1}
+.receipt-paper{background:#fff;color:#202633;padding:22px;border:1px dashed #cbd0d8;border-radius:10px;font-family:Arial,sans-serif}
+.receipt-header{text-align:center;border-bottom:1px dashed #bbb;padding-bottom:14px;margin-bottom:14px}
+.receipt-header h2{margin:0;color:#138a63;font-size:22px}
+.receipt-header p{margin:6px 0 0;font-size:12px;color:#667085}
+.receipt-line{display:flex;justify-content:space-between;gap:10px;padding:6px 0;font-size:13px}
+.receipt-line span{color:#667085;flex:0 0 auto}
+.receipt-line strong{text-align:right;overflow-wrap:anywhere;word-break:break-word}
+.receipt-total{border-top:1px dashed #bbb;margin-top:10px;padding-top:12px}
+.receipt-footer{border-top:1px dashed #bbb;margin-top:15px;padding-top:12px;text-align:center;font-size:11px;line-height:1.6;color:#667085}
+footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
+@media(max-width:760px){.app{padding:12px}.layout{grid-template-columns:1fr}.grid{gap:8px}.card{padding:14px}.hero{padding:20px}}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.wallets{grid-template-columns:1fr}.brand{font-size:19px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div><div class="brand">GOLDVAULT <span>PRO</span></div><div class="sub">Personal Finance • Uangmu, kendalimu.</div></div>
+ <div class="actions">
+  <button class="btn" id="themeBtn">🌙 Tema</button>
+  <button class="btn" id="pinBtn">🔒 PIN</button>
+ </div>
+</header>
+
+<section class="hero">
+ <div class="hero-label">TOTAL SALDO SEMUA DOMPET</div>
+ <div class="balance" id="balance">Rp0</div>
+ <div class="hero-label">Saldo yang tercatat di aplikasi</div>
+ <div class="hero-row">
+  <div>Total pemasukan<strong id="income">Rp0</strong></div>
+  <div>Total pengeluaran<strong id="expense">Rp0</strong></div>
+  <div>Total dompet<strong id="walletCount">0 dompet</strong></div>
+ </div>
+</section>
+
+<section class="grid">
+ <div class="card"><div class="stat-label">💚 Pemasukan</div><div class="stat-value green" id="incomeStat">Rp0</div></div>
+ <div class="card"><div class="stat-label">❤️ Pengeluaran</div><div class="stat-value red" id="expenseStat">Rp0</div></div>
+ <div class="card"><div class="stat-label">🎯 Target tabungan</div><div class="stat-value" id="goalStat">0 target</div></div>
+</section>
+
+<section class="layout">
+ <div class="card">
+  <h2>➕ Catat Transaksi</h2>
+  <form id="txForm">
+   <div class="form-grid">
+    <div class="field"><label>Jenis transaksi</label><select id="txType"><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option></select></div>
+    <div class="field"><label>Nominal (Rp)</label><input id="txAmount" type="number" min="1" step="1" placeholder="50000" required></div>
+    <div class="field full"><label>Keterangan</label><input id="txDesc" maxlength="80" placeholder="Contoh: Uang saku" required></div>
+    <div class="field"><label>Kategori</label><select id="txCategory"><option>Uang saku</option><option>Makanan</option><option>Transportasi</option><option>Belanja</option><option>Gaji</option><option>Hadiah</option><option>Tagihan</option><option>Lainnya</option></select></div>
+    <div class="field"><label>Dompet</label><select id="txWallet"></select></div>
+    <div class="field full"><label>Tanggal</label><input id="txDate" type="date" required></div>
+   </div>
+   <div class="form-actions"><button class="btn primary" type="submit">Simpan Transaksi</button><button class="btn" type="reset">Kosongkan</button></div>
+  </form>
+ </div>
+ <div class="card">
+  <h2>📊 Arus Keuangan</h2>
+  <canvas id="chart"></canvas>
+  <div class="legend"><span><i class="dot" style="background:#138a63"></i>Pemasukan</span><span><i class="dot" style="background:#dc4c55"></i>Pengeluaran</span></div>
+  <p class="sub">Grafik enam bulan terakhir.</p>
+ </div>
+</section>
+
+<section class="layout">
+ <div class="card">
+  <h2>🏦 Dompet Saya</h2>
+  <div id="wallets" class="wallets"></div>
+  <form id="walletForm" style="margin-top:16px">
+   <div class="form-grid">
+    <div class="field"><label>Nama dompet</label><input id="walletName" maxlength="40" placeholder="Contoh: DANA" required></div>
+    <div class="field"><label>Jenis</label><select id="walletType"><option value="cash">Tunai</option><option value="bank">Bank</option><option value="ewallet">E-wallet</option><option value="other">Lainnya</option></select></div>
+   </div>
+   <div class="form-actions"><button class="btn primary" type="submit">+ Buat Dompet</button></div>
+  </form>
+  <p class="sub">Saldo dompet dihitung dari transaksi dan transfer yang dicatat.</p>
+ </div>
+ <div class="card">
+  <h2>🔄 Transfer Antardompet</h2>
+  <form id="transferForm">
+   <div class="form-grid">
+    <div class="field full"><label>Dari dompet</label><select id="fromWallet"></select></div>
+    <div class="field full"><label>Ke dompet</label><select id="toWallet"></select></div>
+    <div class="field full"><label>Nominal (Rp)</label><input id="transferAmount" type="number" min="1" step="1" placeholder="10000" required></div>
+    <div class="field full"><label>Keterangan</label><input id="transferDesc" maxlength="80" placeholder="Contoh: Pindah saldo" required></div>
+   </div>
+   <div class="form-actions"><button class="btn primary" type="submit">Transfer Sekarang</button></div>
+  </form>
+ </div>
+</section>
+
+<section class="layout">
+ <div class="card">
+  <h2>🎯 Buat Target Tabungan</h2>
+  <form id="goalForm">
+   <div class="form-grid">
+    <div class="field full"><label>Nama target</label><input id="goalName" maxlength="60" placeholder="Contoh: Beli laptop" required></div>
+    <div class="field"><label>Target (Rp)</label><input id="goalTarget" type="number" min="1" step="1" required></div>
+    <div class="field"><label>Setoran awal (Rp)</label><input id="goalInitial" type="number" min="0" step="1" value="0" required></div>
+    <div class="field full"><label>Ambil setoran dari dompet</label><select id="goalWallet"></select></div>
+   </div>
+   <div class="form-actions"><button class="btn primary" type="submit">Buat Target</button></div>
+  </form>
+ </div>
+ <div class="card">
+  <h2>💎 Target Saya</h2>
+  <div id="goals" class="goal-list"></div>
+  <div id="emptyGoals" class="empty">Belum ada target tabungan.</div>
+ </div>
+</section>
+
+<section class="card" style="margin-bottom:17px">
+ <h2>📋 Riwayat Transaksi</h2>
+ <div class="filters">
+  <input id="search" type="search" placeholder="Cari keterangan...">
+  <select id="filterType"><option value="all">Semua jenis</option><option value="income">Pemasukan</option><option value="expense">Pengeluaran</option><option value="transfer">Transfer</option></select>
+  <button class="btn" id="csvBtn" type="button">⬇ CSV</button>
+ </div>
+ <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Transaksi</th><th>Dompet</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="transactions"></tbody></table><div id="emptyTx" class="empty hidden">Belum ada transaksi.</div></div>
+</section>
+
+<section class="card" style="margin-bottom:17px">
+ <h2>💾 Cadangan Data</h2>
+ <p class="sub">Cadangkan data ke file JSON secara berkala. Data tersimpan di browser perangkat ini.</p>
+ <div class="actions" style="margin-top:13px">
+  <button class="btn" id="backupBtn" type="button">Unduh Backup JSON</button>
+  <button class="btn" id="restoreBtn" type="button">Pulihkan Backup</button>
+  <input id="restoreFile" type="file" accept=".json,application/json" class="hidden">
+  <button class="btn" id="resetBtn" type="button">Reset Data</button>
+ </div>
+</section>
+<footer>GOLDVAULT PRO • Catatan keuangan pribadi • Data lokal perangkat</footer>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<div id="receiptModal" class="modal hidden"><div class="modal-box">
+ <div id="receiptPaper" class="receipt-paper">
+  <div class="receipt-header"><h2>GOLDVAULT PRO</h2><p>STRUK TRANSAKSI KEUANGAN</p></div>
+  <div id="receiptContent"></div>
+  <div class="receipt-footer">Simpan struk ini sebagai bukti pencatatan transaksi.<br>Terima kasih telah menggunakan GOLDVAULT PRO.</div>
+ </div>
+ <div class="form-actions"><button class="btn" id="closeReceipt" type="button">Tutup</button><button class="btn primary" id="saveJpg" type="button">📸 Simpan Struk JPG</button></div>
+</div></div>
+
+<div id="pinModal" class="modal hidden"><div class="modal-box">
+ <h2>🔒 Atur PIN</h2><p>PIN hanya mengunci tampilan aplikasi di browser ini, bukan enkripsi data.</p>
+ <form id="pinForm"><div class="field"><label>PIN baru (4–12 digit)</label><input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]{4,12}" minlength="4" maxlength="12" placeholder="Kosongkan untuk menonaktifkan"></div>
+ <div class="form-actions"><button class="btn" id="cancelPin" type="button">Batal</button><button class="btn primary">Simpan PIN</button></div></form>
+</div></div>
+
+<div id="lockScreen" class="modal hidden"><div class="modal-box">
+ <h2>GOLDVAULT PRO 🔐</h2><p>Masukkan PIN untuk membuka aplikasi.</p>
+ <form id="unlockForm"><div class="field"><label>PIN</label><input id="unlockPin" type="password" inputmode="numeric" required></div><div class="form-actions"><button class="btn primary">Buka Aplikasi</button></div><p id="unlockError" class="red"></p></form>
+</div></div>
+
+<div id="confirmModal" class="modal hidden"><div class="modal-box">
+ <h2 id="confirmTitle">Konfirmasi</h2><p id="confirmMessage"></p>
+ <div class="form-actions"><button class="btn" id="confirmCancel" type="button">Batal</button><button class="btn primary" id="confirmYes" type="button">Ya</button></div>
+</div></div>
+
+<!-- Modal Setor/Ambil berdiri sendiri, tidak bersarang di confirmModal -->
+<div id="goalAmountModal" class="modal hidden"><div class="amount-modal-box">
+ <h2 id="goalAmountTitle">💰 Setor Tabungan</h2>
+ <p id="goalAmountDescription">Masukkan nominal yang ingin diproses.</p>
+ <form id="goalAmountForm">
+  <div class="field"><label for="goalAmountInput">Nominal (Rp)</label><input id="goalAmountInput" type="number" min="1" step="1" inputmode="numeric" placeholder="Contoh: 10000" required></div>
+  <div class="amount-modal-actions"><button class="btn" id="goalAmountCancel" type="button">Batal</button><button class="btn primary" id="goalAmountSubmit" type="submit">Konfirmasi</button></div>
+ </form>
+</div></div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const KEY="goldvault_ultimate_v1",THEME="goldvault_ultimate_theme",PIN="goldvault_ultimate_pin";
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let state={wallets:[],transactions:[],goals:[]},toastTimer=null,confirmAction=null;
+
+function notify(msg){const e=$("toast");e.textContent=msg;e.classList.remove("hidden");clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.add("hidden"),2800)}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){notify("Gagal menyimpan. Periksa penyimpanan browser.");return false}}
+function valid(n,zero=false){return Number.isSafeInteger(n)&&(zero?n>=0:n>0)}
+function wallet(id){return state.wallets.find(w=>w.id===id)}
+function walletBalance(id){
+ let n=0;
+ state.transactions.forEach(t=>{
+  if(t.type==="income"&&t.walletId===id)n+=t.amount;
+  if(t.type==="expense"&&t.walletId===id)n-=t.amount;
+  if(t.type==="transfer"){
+   if(t.from===id)n-=t.amount;
+   if(t.to===id)n+=t.amount;
+  }
+ });
+ return n;
+}
+function allBalance(){return state.wallets.reduce((sum,w)=>sum+walletBalance(w.id),0)}
+function totals(){let income=0,expense=0;state.transactions.forEach(t=>{if(t.type==="income")income+=t.amount;if(t.type==="expense")expense+=t.amount});return{income,expense,balance:allBalance()}}
+function typeName(t){return t==="income"?"Pemasukan":t==="expense"?"Pengeluaran":t==="transfer"?"Transfer":"Tabungan"}
+function walletOptions(){
+ const options=state.wallets.map(w=>`<option value="${esc(w.id)}">${esc(w.name)} — ${money(walletBalance(w.id))}</option>`).join("");
+ ["txWallet","fromWallet","toWallet","goalWallet"].forEach(id=>$(id).innerHTML=options);
+ $("toWallet").disabled=state.wallets.length<2;
+}
+function renderWallets(){
+ $("wallets").innerHTML=state.wallets.map(w=>`<div class="wallet"><div class="wallet-top"><div class="wallet-name">${esc(w.name)}</div><span class="wallet-type">${esc(({cash:"Tunai",bank:"Bank",ewallet:"E-wallet",other:"Lainnya"})[w.type]||"Lainnya")}</span></div><div class="wallet-balance">${money(walletBalance(w.id))}</div><div class="actions"><button class="btn small danger delete-wallet" data-id="${esc(w.id)}" type="button">Hapus dompet</button></div></div>`).join("")||'<div class="empty">Belum ada dompet.</div>';
+}
+function renderSummary(){
+ const t=totals();$("balance").textContent=money(t.balance);$("income").textContent=money(t.income);$("expense").textContent=money(t.expense);$("incomeStat").textContent=money(t.income);$("expenseStat").textContent=money(t.expense);$("walletCount").textContent=state.wallets.length+" dompet";$("goalStat").textContent=state.goals.length+" target";
+}
+function renderTransactions(){
+ const q=$("search").value.trim().toLowerCase(),filter=$("filterType").value;
+ const rows=state.transactions.filter(t=>(filter==="all"||t.type===filter)&&((t.description||"").toLowerCase().includes(q))).slice().sort((a,b)=>b.date.localeCompare(a.date));
+ $("transactions").innerHTML=rows.map(t=>{
+  let walletText=t.type==="transfer"?(wallet(t.from)?.name||"Tabungan") +" → "+(wallet(t.to)?.name||"Tabungan"):(wallet(t.walletId)?.name||"Dompet dihapus");
+  let sign=t.type==="income"?"+":t.type==="expense"?"−":"↔",cls=t.type==="income"?"green":t.type==="expense"?"red":"";
+  return `<tr><td>${esc(t.date)}</td><td>${esc(typeName(t.type))}<br>${esc(t.description)}</td><td>${esc(walletText)}</td><td class="amount ${cls}">${sign} ${money(t.amount)}</td><td><div class="actions"><button class="btn small show-receipt" data-id="${esc(t.id)}" type="button">🧾 Struk</button><button class="btn small danger delete-tx" data-id="${esc(t.id)}" type="button">Hapus</button></div></td></tr>`;
+ }).join("");
+ $("emptyTx").classList.toggle("hidden",rows.length>0);walletOptions();
+}
+function renderGoals(){
+ $("goals").innerHTML=state.goals.map(g=>{
+  const p=Math.min(100,Math.floor(g.saved/g.target*100));
+  return `<div class="goal"><div class="goal-head"><div><div class="goal-name">${esc(g.name)}</div><div class="goal-amount">${money(g.saved)} dari ${money(g.target)} • ${esc(wallet(g.walletId)?.name||"Dompet dihapus")}</div></div><strong>${p}%</strong></div><div class="progress"><div style="width:${p}%"></div></div><div class="goal-actions"><button class="btn primary goal-add" data-id="${esc(g.id)}" type="button">+ Setor</button><button class="btn goal-take" data-id="${esc(g.id)}" type="button">Ambil</button><button class="btn danger goal-delete" data-id="${esc(g.id)}" type="button">Hapus</button></div>${p>=100?'<p class="green">🎉 Target tercapai!</p>':""}</div>`;
+ }).join("");
+ $("emptyGoals").classList.toggle("hidden",state.goals.length>0);
+}
+function renderChart(){
+ const c=$("chart"),ctx=c.getContext("2d"),w=Math.max(250,c.clientWidth),h=220,dpr=window.devicePixelRatio||1;
+ c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ const now=new Date(),months=[];
+ for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);months.push({key:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"),label:d.toLocaleDateString("id-ID",{month:"short"}),income:0,expense:0})}
+ state.transactions.forEach(t=>{const m=months.find(m=>m.key===t.date.slice(0,7));if(m&&m[t.type]!==undefined)m[t.type]+=t.amount});
+ const max=Math.max(1,...months.flatMap(m=>[m.income,m.expense])),pad=12,bottom=28,plot=h-bottom-12,gw=(w-pad*2)/6,bw=Math.min(17,gw*.27),style=getComputedStyle(document.body);
+ ctx.font="11px Arial";ctx.textAlign="center";
+ for(let i=0;i<5;i++){let y=12+plot*i/4;ctx.strokeStyle=style.getPropertyValue("--border");ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad,y);ctx.stroke()}
+ months.forEach((m,i)=>{const x=pad+gw*i+gw/2;ctx.fillStyle="#138a63";ctx.fillRect(x-bw-2,12+plot-m.income/max*plot,bw,m.income/max*plot);ctx.fillStyle="#dc4c55";ctx.fillRect(x+2,12+plot-m.expense/max*plot,bw,m.expense/max*plot);ctx.fillStyle=style.getPropertyValue("--muted");ctx.fillText(m.label,x,h-8)});
+}
+function render(){renderSummary();renderWallets();renderTransactions();renderGoals();renderChart()}
+function confirm(title,msg,action){$("confirmTitle").textContent=title;$("confirmMessage").textContent=msg;confirmAction=action;$("confirmModal").classList.remove("hidden")}
+$("confirmCancel").onclick=()=>{$("confirmModal").classList.add("hidden");confirmAction=null};
+$("confirmYes").onclick=()=>{const f=confirmAction;$("confirmModal").classList.add("hidden");confirmAction=null;if(f)f()};
+
+function showReceipt(t){
+ if(!t)return notify("Transaksi tidak ditemukan.");
+ let details="",label=typeName(t.type),amountColor=t.type==="income"?"#138a63":t.type==="expense"?"#dc4c55":"#202633";
+ const row=(a,b)=>`<div class="receipt-line"><span>${esc(a)}</span><strong>${esc(b)}</strong></div>`;
+ details+=row("Nomor struk",t.id.slice(-8).toUpperCase());details+=row("Tanggal",t.date);details+=row("Jenis",label);details+=row("Keterangan",t.description);
+ if(t.type==="transfer"){details+=row("Dari",wallet(t.from)?.name||(String(t.from).startsWith("goal:")?"Target tabungan":"Dompet"));details+=row("Ke",wallet(t.to)?.name||(String(t.to).startsWith("goal:")?"Target tabungan":"Dompet"))}
+ else details+=row("Dompet",wallet(t.walletId)?.name||"Dompet");
+ details+=row("Kategori",t.category||"—");details+=`<div class="receipt-line receipt-total"><strong>TOTAL</strong><strong style="color:${amountColor};font-size:18px">${t.type==="income"?"+":t.type==="expense"?"−":""}${money(t.amount)}</strong></div>`;
+ $("receiptContent").innerHTML=details;$("receiptModal").classList.remove("hidden");
+}
+$("closeReceipt").onclick=()=>$("receiptModal").classList.add("hidden");
+$("receiptModal").addEventListener("click",e=>{if(e.target===$("receiptModal"))$("receiptModal").classList.add("hidden")});
+$("saveJpg").onclick=()=>{
+ const button=$("saveJpg"),content=$("receiptContent");
+ if(!content.innerText.trim())return notify("Struk belum tersedia.");
+ button.disabled=true;button.textContent="⏳ Membuat JPG...";
+ try{
+  const width=720,pad=42,lh=39,rows=[...content.querySelectorAll(".receipt-line")],height=50+125+rows.length*lh+100,scale=2,c=document.createElement("canvas");
+  c.width=width*scale;c.height=height*scale;const x=c.getContext("2d");x.scale(scale,scale);x.fillStyle="#fff";x.fillRect(0,0,width,height);x.strokeStyle="#cbd0d8";x.setLineDash([7,5]);x.strokeRect(12,12,width-24,height-24);x.setLineDash([]);
+  let y=68;x.textAlign="center";x.fillStyle="#138a63";x.font="bold 34px Arial";x.fillText("GOLDVAULT PRO",width/2,y);y+=35;x.fillStyle="#667085";x.font="16px Arial";x.fillText("STRUK TRANSAKSI KEUANGAN",width/2,y);y+=28;x.strokeStyle="#bbb";x.setLineDash([5,5]);x.beginPath();x.moveTo(pad,y);x.lineTo(width-pad,y);x.stroke();x.setLineDash([]);y+=24;
+  rows.forEach(r=>{const span=r.querySelector("span"),strong=[...r.querySelectorAll("strong")],isTotal=r.classList.contains("receipt-total"),a=span?span.innerText:strong[0]?.innerText,b=span?strong[0]?.innerText:strong[1]?.innerText;if(isTotal){y+=8;x.strokeStyle="#bbb";x.setLineDash([5,5]);x.beginPath();x.moveTo(pad,y);x.lineTo(width-pad,y);x.stroke();x.setLineDash([]);y+=35}x.textAlign="left";x.fillStyle=isTotal?"#202633":"#667085";x.font=isTotal?"bold 19px Arial":"17px Arial";x.fillText(a||"",pad,y);x.textAlign="right";x.fillStyle=isTotal?(strong[strong.length-1]?.style.color||"#202633"):"#202633";x.font=isTotal?"bold 19px Arial":"bold 17px Arial";x.fillText((b||"").slice(0,38),width-pad,y,430);y+=isTotal?42:lh});
+  y+=8;x.textAlign="center";x.fillStyle="#667085";x.font="14px Arial";x.fillText("Simpan struk ini sebagai bukti pencatatan transaksi.",width/2,y);y+=23;x.fillText("Terima kasih telah menggunakan GOLDVAULT PRO.",width/2,y);
+  c.toBlob(blob=>{button.disabled=false;button.textContent="📸 Simpan Struk JPG";if(!blob)return notify("Gagal membuat JPG.");const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="GOLDVAULT-STRUK-"+Date.now()+".jpg";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);notify("JPG diunduh. Periksa folder Download.")},"image/jpeg",.95);
+ }catch(e){button.disabled=false;button.textContent="📸 Simpan Struk JPG";notify("Gagal membuat JPG.")}
+};
+
+$("txDate").value=today();
+$("txForm").addEventListener("submit",e=>{
+ e.preventDefault();const amount=Number($("txAmount").value),desc=$("txDesc").value.trim(),walletId=$("txWallet").value,date=$("txDate").value,type=$("txType").value;
+ if(!valid(amount)||!desc||!wallet(walletId))return notify("Lengkapi data transaksi dengan benar.");
+ if(!date||date>today())return notify("Tanggal tidak valid.");
+ if(type==="expense"&&walletBalance(walletId)<amount)return notify("Saldo dompet tidak mencukupi.");
+ const t={id:newId(),type,amount,description:desc,category:$("txCategory").value,walletId,date};
+ state.transactions.push(t);if(!persist()){state.transactions.pop();return}
+ $("txForm").reset();$("txDate").value=today();render();notify("Transaksi berhasil disimpan.");showReceipt(t);
+});
+
+$("walletForm").addEventListener("submit",e=>{
+ e.preventDefault();const name=$("walletName").value.trim();if(!name)return notify("Masukkan nama dompet.");
+ if(state.wallets.some(w=>w.name.toLowerCase()===name.toLowerCase()))return notify("Nama dompet sudah ada.");
+ const w={id:newId(),name,type:$("walletType").value};state.wallets.push(w);if(!persist()){state.wallets.pop();return}
+ $("walletForm").reset();render();notify("Dompet berhasil dibuat.");
+});
+$("wallets").addEventListener("click",e=>{
+ const b=e.target.closest(".delete-wallet");if(!b)return;const w=wallet(b.dataset.id);if(!w)return;
+ if(state.wallets.length<=1)return notify("Minimal harus ada satu dompet.");
+ if(state.transactions.some(t=>t.walletId===w.id||t.from===w.id||t.to===w.id)||state.goals.some(g=>g.walletId===w.id))return notify("Dompet masih memiliki riwayat atau target. Hapus/selesaikan terkait terlebih dahulu.");
+ confirm("Hapus dompet?",'Dompet "'+w.name+'" akan dihapus.',()=>{const old=state.wallets;state.wallets=state.wallets.filter(x=>x.id!==w.id);if(!persist()){state.wallets=old;return}render();notify("Dompet dihapus.")});
+});
+
+$("transferForm").addEventListener("submit",e=>{
+ e.preventDefault();const from=$("fromWallet").value,to=$("toWallet").value,amount=Number($("transferAmount").value),description=$("transferDesc").value.trim();
+ if(from===to)return notify("Pilih dua dompet yang berbeda.");
+ if(!wallet(from)||!wallet(to)||!valid(amount)||!description)return notify("Lengkapi transfer dengan benar.");
+ if(walletBalance(from)<amount)return notify("Saldo dompet asal tidak mencukupi.");
+ const t={id:newId(),type:"transfer",amount,description,from,to,date:today(),category:"Transfer"};
+ state.transactions.push(t);if(!persist()){state.transactions.pop();return}
+ $("transferForm").reset();render();notify("Transfer berhasil dicatat.");
+});
+
+$("goalForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const name=$("goalName").value.trim(),target=Number($("goalTarget").value),saved=Number($("goalInitial").value),walletId=$("goalWallet").value;
+ if(!name||!valid(target)||!valid(saved,true)||!wallet(walletId))return notify("Lengkapi target dengan benar.");
+ if(walletBalance(walletId)<saved)return notify("Saldo dompet tidak cukup untuk setoran awal.");
+ const g={id:newId(),name,target,saved,walletId};
+ const added=[];
+ if(saved>0)added.push({id:newId(),type:"transfer",amount:saved,description:"Setoran awal target: "+name,from:walletId,to:"goal:"+g.id,date:today(),category:"Tabungan"});
+ state.goals.push(g);state.transactions.push(...added);
+ if(!persist()){state.goals.pop();state.transactions.splice(-added.length,added.length);return}
+ $("goalForm").reset();$("goalInitial").value="0";render();notify("Target tabungan dibuat.");
+});
+
+$("transactions").addEventListener("click",e=>{
+ const r=e.target.closest(".show-receipt"),d=e.target.closest(".delete-tx");
+ if(r){const t=state.transactions.find(x=>x.id===r.dataset.id);return showReceipt(t)}
+ if(d){
+  const t=state.transactions.find(x=>x.id===d.dataset.id);if(!t)return;
+  confirm("Hapus transaksi?","Menghapus transaksi dapat mengubah saldo dompet dan target. Pastikan transaksi yang terkait target diperiksa.",()=>{
+   const old=state.transactions;state.transactions=state.transactions.filter(x=>x.id!==t.id);
+   if(!persist()){state.transactions=old;return}render();notify("Transaksi dihapus.");
+  });
+ }
+});
+$("search").addEventListener("input",renderTransactions);
+$("filterType").addEventListener("change",renderTransactions);
+
+function download(name,blob){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+$("csvBtn").onclick=()=>{
+ const rows=[["Tanggal","Jenis","Keterangan","Nominal","Dompet"]];
+ state.transactions.forEach(t=>rows.push([t.date,typeName(t.type),t.description,t.amount,t.type==="transfer"?(wallet(t.from)?.name||"Target tabungan")+" -> "+(wallet(t.to)?.name||"Target tabungan"):(wallet(t.walletId)?.name||"")]));
+ const csv="\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");
+ download("goldvault-transaksi.csv",new Blob([csv],{type:"text/csv;charset=utf-8"}));notify("CSV diunduh.");
+};
+$("backupBtn").onclick=()=>{download("goldvault-backup.json",new Blob([JSON.stringify(state,null,2)],{type:"application/json"}));notify("Backup JSON diunduh.")};
+$("restoreBtn").onclick=()=>$("restoreFile").click();
+$("restoreFile").addEventListener("change",async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{
+  const s=JSON.parse(await f.text());
+  if(!s||!Array.isArray(s.wallets)||!Array.isArray(s.transactions)||!Array.isArray(s.goals))throw Error();
+  const old=state;state=s;
+  if(!state.wallets.every(w=>w&&typeof w.id==="string"&&typeof w.name==="string")||
+     !state.transactions.every(t=>t&&typeof t.id==="string"&&["income","expense","transfer"].includes(t.type)&&valid(t.amount)&&typeof t.date==="string")||
+     !state.goals.every(g=>g&&typeof g.id==="string"&&typeof g.name==="string"&&valid(g.target)&&valid(g.saved,true))){
+   state=old;throw Error();
+  }
+  if(!persist()){state=old;return}render();notify("Backup berhasil dipulihkan.");
+ }catch(err){notify("File backup tidak valid.")}
+ e.target.value="";
+});
+$("resetBtn").onclick=()=>confirm("Reset seluruh data?","Semua dompet, transaksi, dan target akan dihapus.",()=>{
+ const old=state;state={wallets:[{id:newId(),name:"Tunai",type:"cash"}],transactions:[],goals:[]};
+ if(!persist()){state=old;return}render();notify("Data berhasil direset.");
+});
+
+$("themeBtn").onclick=()=>{
+ document.body.classList.toggle("dark");const dark=document.body.classList.contains("dark");
+ $("themeBtn").textContent=dark?"☀️ Tema":"🌙 Tema";
+ try{localStorage.setItem(THEME,dark?"dark":"light")}catch(e){}
+ renderChart();
+};
+try{if(localStorage.getItem(THEME)==="dark"){document.body.classList.add("dark");$("themeBtn").textContent="☀️ Tema"}}catch(e){}
+$("pinBtn").onclick=()=>{$("pinInput").value="";$("pinModal").classList.remove("hidden")};
+$("cancelPin").onclick=()=>$("pinModal").classList.add("hidden");
+$("pinForm").addEventListener("submit",e=>{
+ e.preventDefault();const pin=$("pinInput").value.trim();
+ if(pin&&!/^\d{4,12}$/.test(pin))return notify("PIN harus 4–12 digit.");
+ try{if(pin)localStorage.setItem(PIN,pin);else localStorage.removeItem(PIN)}catch(e){return notify("Gagal menyimpan PIN")}
+ $("pinModal").classList.add("hidden");notify(pin?"PIN diatur.":"PIN dinonaktifkan.");
+});
+$("unlockForm").addEventListener("submit",e=>{
+ e.preventDefault();let pin="";try{pin=localStorage.getItem(PIN)||""}catch(e){}
+ if(pin&&$("unlockPin").value===pin){$("lockScreen").classList.add("hidden");$("unlockPin").value="";$("unlockError").textContent=""}
+ else $("unlockError").textContent="PIN salah.";
+});
+
+/* ==============================
+   LOGIKA MODAL SETOR DAN AMBIL
+   ============================== */
+let selectedGoalId=null,selectedGoalAction=null;
+const goalAmountModal=$("goalAmountModal"),goalAmountForm=$("goalAmountForm"),goalAmountInput=$("goalAmountInput");
+
+function closeGoalAmountModal(){
+ goalAmountModal.classList.add("hidden");
+ goalAmountForm.reset();
+ selectedGoalId=null;selectedGoalAction=null;
+}
+$("goalAmountCancel").addEventListener("click",closeGoalAmountModal);
+goalAmountModal.addEventListener("click",e=>{if(e.target===goalAmountModal)closeGoalAmountModal()});
+
+$("goals").addEventListener("click",e=>{
+ const button=e.target.closest("button");if(!button)return;
+ const goal=state.goals.find(item=>item.id===button.dataset.id);if(!goal)return;
+
+ if(button.classList.contains("goal-delete")){
+  confirm("Hapus target?","Target ini akan dihapus. Riwayat setoran/penarikan target juga akan dihapus.",()=>{
+   const oldGoals=state.goals,oldTransactions=state.transactions,marker="goal:"+goal.id;
+   state.goals=state.goals.filter(item=>item.id!==goal.id);
+   state.transactions=state.transactions.filter(t=>t.from!==marker&&t.to!==marker&&!(t.category==="Tabungan"&&(t.description||"").includes(goal.name)));
+   if(!persist()){state.goals=oldGoals;state.transactions=oldTransactions;return}
+   render();notify("Target berhasil dihapus.");
+  });
+  return;
+ }
+ let action;
+ if(button.classList.contains("goal-add"))action="add";
+ else if(button.classList.contains("goal-take"))action="take";
+ else return;
+
+ selectedGoalId=goal.id;selectedGoalAction=action;
+ if(action==="add"){
+  $("goalAmountTitle").textContent="💰 Setor Tabungan";
+  $("goalAmountDescription").textContent="Saldo akan diambil dari dompet "+(wallet(goal.walletId)?.name||"target")+".";
+  $("goalAmountSubmit").textContent="+ Setor";
+ }else{
+  $("goalAmountTitle").textContent="💸 Ambil Tabungan";
+  $("goalAmountDescription").textContent="Saldo akan dikembalikan ke dompet "+(wallet(goal.walletId)?.name||"target")+".";
+  $("goalAmountSubmit").textContent="Ambil";
+ }
+ goalAmountInput.value="";goalAmountModal.classList.remove("hidden");
+ setTimeout(()=>goalAmountInput.focus(),100);
+});
+
+goalAmountForm.addEventListener("submit",e=>{
+ e.preventDefault();
+ const goal=state.goals.find(item=>item.id===selectedGoalId);
+ if(!goal){closeGoalAmountModal();notify("Target tidak ditemukan.");return}
+ const amount=Number(goalAmountInput.value),action=selectedGoalAction,walletId=goal.walletId;
+ if(!valid(amount))return notify("Masukkan nominal yang valid.");
+ if(!wallet(walletId))return notify("Dompet target tidak ditemukan.");
+
+ if(action==="add"){
+  if(walletBalance(walletId)<amount)return notify("Saldo dompet tidak mencukupi.");
+  const oldSaved=goal.saved,tx={id:newId(),type:"transfer",amount,description:"Setoran target: "+goal.name,from:walletId,to:"goal:"+goal.id,date:today(),category:"Tabungan"};
+  goal.saved+=amount;state.transactions.push(tx);
+  if(!persist()){goal.saved=oldSaved;state.transactions.pop();return}
+  closeGoalAmountModal();render();notify("Setoran tabungan berhasil!");
+ }else if(action==="take"){
+  if(amount>goal.saved)return notify("Saldo target tidak mencukupi.");
+  const oldSaved=goal.saved,tx={id:newId(),type:"transfer",amount,description:"Penarikan target: "+goal.name,from:"goal:"+goal.id,to:walletId,date:today(),category:"Tabungan"};
+  goal.saved-=amount;state.transactions.push(tx);
+  if(!persist()){goal.saved=oldSaved;state.transactions.pop();return}
+  closeGoalAmountModal();render();notify("Penarikan tabungan berhasil!");
+ }
+});
+
+function load(){
+ try{
+  const raw=localStorage.getItem(KEY);
+  if(raw){
+   const s=JSON.parse(raw);
+   if(s&&Array.isArray(s.wallets)&&Array.isArray(s.transactions)&&Array.isArray(s.goals))state=s;
+  }
+ }catch(e){notify("Data tersimpan tidak dapat dibaca.")}
+ if(!state.wallets.length)state.wallets=[{id:newId(),name:"Tunai",type:"cash"},{id:newId(),name:"Tabungan Bank",type:"bank"},{id:newId(),name:"E-wallet",type:"ewallet"}];
+ persist();
+}
+load();render();
+try{if(localStorage.getItem(PIN))$("lockScreen").classList.remove("hidden")}catch(e){}
+window.addEventListener("resize",()=>{clearTimeout(window._gvResize);window._gvResize=setTimeout(renderChart,120)});
+</script>
+</body>
+</html>
